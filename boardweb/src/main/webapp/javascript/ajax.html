@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+	<ul id="show">
+	</ul>
+
+	<script>
+  var listFunc; //unddefined.
+  	console.log('javascript/ajax.html')
+
+  	// 비동기 방식처리
+  	setTimeout(function() { 
+  	 //console.log('hello-1')
+	  	
+  	   setTimeout(function() {  
+		 //console.log('hello-2')	  	  	
+	  		
+			setTimeout(function() {  
+		  	  	//console.log('hello-3')		  	 
+			 }, 2000);
+	  	  }, 3000);
+  	}, 1000);
+  	
+
+   // 목록출력.
+	async function list() {
+		let resolve = await fetch('../replyList.do?bno=' + 122 + '&page=' + 1)  // 서버에 처리 요청.  // promise객체.
+		let result =  await resolve.json();
+		 result.forEach((reply, idx,ary) => { // (reply, idx,ary) => {         reply라는 변수에 한건한건받아오겠다.
+		 console.log(reply); // []
+		 let li = document.createElement('li');
+		 li.innerText = reply.reply; //reply객체에 reply라는 값들..
+		 document.querySelector('#show').append(li);
+		})
+	}
+
+  	// 등록.
+  	async function asyncFunc (){
+  	  try{
+  		let prom1 = await fetch('../addReply.do', {
+  	  	 method: 'post', 		
+  	  	 headers: {
+  	 		'Content-Type':'application/x-www-form-urlencoded'
+  	    },
+  	     body: 'bno='+ 122 +'&reply='+ 'fetch test' +'&replyer='+ 'newbie'
+  		});
+  	   let json1 = await prom1.json();
+  		if (json1.retCode == 'OK') {
+  			alert('성공')
+  			let prom2 =  await fetch('../replyList.do?bno=' + 122 + '&page=' + 1)  
+  		    let json2 =  await prom2.json();
+  			console.log(json2)
+  			json2.forEach((reply, idx,ary) => { // (reply, idx,ary) => {         reply라는 변수에 한건한건받아오겠다.
+		  console.log(reply); // []
+			 let li = document.createElement('li');
+			 li.innerText = reply.reply; //reply객체에 reply라는 값들..
+			 document.querySelector('#show').append(li);
+		 })
+  		} else {
+  			alert('등록실패')	
+  		}
+  		
+  		}catch(err){
+  		 console.log(err);
+  	    }	
+  	s}
+  	
+  	 
+  	// 삭제.
+	fetch('../removeReply.do', {
+	  method: 'post',
+	  headers:{
+			'Content-Type':'application/x-www-form-urlencoded'
+		},
+		body:   'rno=' + 77
+	})
+	.then(resolve => resolve.json())
+	.then(result => {
+		if(result.retCode == 'OK'){
+			alert('삭제성공')
+		} else {
+			alert('삭제실패')
+		}
+	})
+	.catch(err => console.log(err));
+	
+
+  </script>
+</body>
+</html>

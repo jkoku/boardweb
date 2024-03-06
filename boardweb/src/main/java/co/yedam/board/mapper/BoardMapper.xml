@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="co.yedam.board.mapper.BoardMapper">
+
+  <select id="boardList" resultType="board" parameterType="search">
+     select rn,
+            board_no,
+            title,
+            content,
+            writer,
+            view_cnt,
+            create_date
+     from(select /*+ INDEX_DESC(b board_pk)*/ rownum rn, b.*
+          from tbl_board b
+          <where>
+            <choose>
+                <when test="searchCondition == 'T' .toString()">
+                 title like '%'||#{keyword}||'%'
+                </when>
+                <when test="searchCondition == 'W' .toString()">
+                 writer like '%'||#{keyword}||'%'
+                </when>
+                <when test="searchCondition == 'TW' .toString()">
+                (title like '%'||#{keyword}||'%' or writer like '%'||#{keyword}||'%')
+              </when>
+            </choose>
+          <![CDATA[
+          and rownum <= (#{page} * 5 ) 
+          ]]>
+          </where>   
+          ) a 
+       where a.rn > (#{page} -1) * 5    
+    </select>
+    
+    <select id="getTotalCnt" resultType="int" parameterType="search">
+    	select count(*)
+    	from tbl_board
+    	   <where>
+            <choose>
+                <when test="searchCondition == 'T' .toString()">
+                 title like '%'||#{keyword}||'%'
+                </when>
+                <when test="searchCondition == 'W' .toString()">
+                 writer like '%'||#{keyword}||'%'
+                </when>
+                <when test="searchCondition == 'TW' .toString()">
+                (title like '%'||#{keyword}||'%' or writer like '%'||#{keyword}||'%')
+              </when> 
+           	 </choose>
+            </where>  
+    </select>
+    
+    <select id ="selectBoard" parameterType="int" resultType="board">
+	  select board_no
+	   		  ,title
+	   		  ,content
+	   		  ,writer
+	   		  ,view_cnt
+	   		  ,create_date
+	   from tbl_board
+	   where board_no = #{bno}
+	</select>
+	
+    <update id = "updateCount" parameterType="int">
+    update tbl_board
+	set view_cnt = view_cnt + 1
+	where board_no = #{bno}
+    </update>
+
+	<update id = "updateBoard" parameterType="board">
+     update tbl_board
+     set title = #{title}
+         ,content = #{content}
+     where board_no = #{boardNo} 
+    </update>
+    
+    <delete id="deleteBoard" parameterType="int">
+     delete tbl_board
+     where board_no = #{bno}
+     </delete>
+    
+    <insert id="insertBoard">
+     insert into tbl_board (board_no, title, content, writer)
+     values (board_seq.nextval, #{title}, #{content}, #{writer})
+    </insert>
+    
+    
+    <!-- 도서관련..  -->
+    <select id="bookList" resultType="co.yedam.board.Book">
+     select book_code
+           ,book_name
+           ,author
+           ,press
+           ,price
+      from tbl_book
+     </select>
+    <insert id="insertBook" parameterType="co.yedam.board.Book">
+      insert into tbl_book
+      values(#{bookCode}, #{bookName}, #{author}, #{press}, #{price})
+    </insert>
+    
+    <delete id="deleteBook" parameterType="string">
+      delete tbl_book
+      where book_code = #{bcode}
+     </delete>
+</mapper>

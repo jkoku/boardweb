@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<p>Hello
+	
+	<input type="text" id="name"> <!--  -->
+	<button class="btn">클릭</button>
+	
+	<ul id="list">
+	  <li>김민수 <button>삭제</button></li>
+	  <li>황인만 <button>삭제</button></li>
+	</ul>
+	
+	<!--학생정보 입력  -->
+	<table border="1" id="stdTable">
+	 <tr>
+	    <th>학생번호</th><td><input type="number" id="sno"></td>
+	 </tr>  
+	 <tr>
+	    <th>이 름</th><td><input type="text" id="sname"></td>
+	 </tr>  
+	 <tr>
+	    <th>점 수</th><td><input type="number" id="score"></td>
+	 </tr>  
+	   <tr>
+	    <td colspan="2" align="center">
+	      <button id ="addBtn">등록</button>
+	      <button id ="editBtn">수정</button>
+	    </td>
+	   </tr>
+	 </table>
+	 
+	<h3>학생목록</h3>
+	<table border="1">
+	  <thead>
+	    <tr>
+	      <th>학생번호</th><th>이름</th><th>점수</th><th>삭제</th>
+		</tr>
+	<tbody id ="studList">
+	   <tr>
+	     <td>100</td><td>홍길동</td><td>70</td><td><button>삭제</button></td>
+	   </tr>
+	</tbody>
+	</table>
+	<script>
+	
+	let str = "hello";
+	str = 10;
+	str = { 
+			name: "홍길동", // 키,밸류
+			age: 20,
+			showInfo: function() {
+				return '이름은' + this.name + ', 나이는' + this.age ;
+			} 
+		  }
+	// 속성. 각각의 속성 받아옴 for in name age 이라는 속성을 prop에, / 속성을 받아오기 위한 반복분.  담겨있는게아니라 한번씩 받아옴(변수니까).네임값 다음 에이지값다음 쇼인포값
+	// 객체에는 여러가지 속성이 있을 수 있다. 가져올때 반복문을 사용한다. for in  
+	for(let prop in str) {  // str이가진 name이라는 속성을 표현하는 방법 1. str.name  2. str['name'] 속성에해당되는값  .연산자보다는 2번으로
+		console.log(prop, str[prop]) //키,값
+	}
+	str = ["홍길동", "김민수", 20]
+	
+	// 배열. for of
+	for(let val of str) {
+		console.log(val);
+	}
+	
+	// 배열 안에 담겨있는 값이 객체일 경우(대부분)
+	str = [
+		{sno: 101, sname:"김학생", score: 80},
+		{sno: 102, sname:"최학생", score: 85},
+		{sno: 103, sname:"박학생", score: 90},
+	]
+	for (let student of str) { // 변수 student 
+		//let prop = 'score';
+		//console.log(student.sno, student['sname'], student[prop]);
+	
+		for (let prop in student) {  //
+			console.log(` 속성은 ${prop} : 값은 ${student[prop]}`); //백틱 안에는 같이 넣어 사용가능. `` '' ""
+			//console.log('속성은'+ prop + ' : ' + '값은' + 'student[prop]') 위와 같은 식이지만 불편해서 백틱이용해서 위처럼 사용. 
+		}
+	}
+	// .연산자는 오브젝트에서 각각의 속성에 접근한다. 
+	//console.log(str[0].sno) //첫번째요소의 학생번호.
+	console.log(str[0]['score']) //인덱스값 대신 속성
+	console.log(str[0], typeof str[2])
+	
+</script>
+	<script src="script.js"></script>
+</body>
+</html>
