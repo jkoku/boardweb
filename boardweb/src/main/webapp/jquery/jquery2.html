@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>jquery2.html</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+<body>
+  Todo : <input id="userVal"><button id="addBtn">추가</button>
+  <br/>
+  <ul id="list"></ul>
+  
+  <hr />
+  학번: <input id="sno"> 
+  이름: <input id = "sname">
+  점수: <input id="score">
+  <button class="addBtn">등록</button>
+  <table border="1">
+  	<thead>
+  		<tr>
+  		  <th><input type="checkbox"></th>
+  		  <th>학번</th>
+  		  <th>이름</th>
+  		  <th>점수</th>
+  		</tr>
+  	</thead>
+  	<tbody id ="list">
+  	  <tr>
+  	   <td><input type = "checkbox"></td>
+  		  <td>학번</td>
+  		  <td>이름</td>
+  		  <td>점수</td>
+  	 </tr>
+     <tr>
+  	   <td><input type = "checkbox"></td>
+  		  <td>학번</td>
+  		  <td>이름</td>
+  		  <td>점수</td>
+  	 </tr>
+  	</tbody>
+  </table>
+  <script>
+  //추가버튼.. 	
+   $('#addBtn').on('click', function(e) {
+  		let val = $('#userVal').val();
+  		let delBtn = $('<button>삭제</button>');
+  		delBtn.on('click', function(e){
+  			delBtn.parent().remove();
+  		});
+  		
+  		$('#list').append($('<li />').text(val).append(delBtn)); // <li>홍길동<button>삭제</button>
+  		$('#userVal').val('');
+  	}) 
+  	 
+  	// 등록버튼
+/*   	$('.addBtn').on('click', function(e) {
+  		
+  		let snoVal = $('#sno').val();
+  		let snameVal = $('#sname').val();
+  		let scoreVal = $('#score').val();
+  		// tr생성>td*3생성.
+  		let tr = $('<tr />')
+  		let td1 = $('<td />').text(snoVal)
+  		let td2 = $('<td />').text(snameVal)
+  		let td3 = $('<td />').text(scoreVal)
+  		//tr 안에 td넣기
+  		tr.append(td1, td2, td3);
+  		//tbody 안에 tr넣기
+  		$('tbody#list').append(tr);
+  		// 입력값 초기화.
+  		$('#sno').val('');
+  		$('#sname').val('');
+  		$('#score').val('');	
+  	}) */
+  	
+  	// 체크박스 change이벤트.
+  	$('thead input[type="checkbox"]').on('change', function (e){
+  		//console.log($(this).prop('checked'));
+  		let trueOrFalse = $(this).prop('checked');
+  		$('tbody input[type="checkbox"]').prop('checked', trueOrFalse);
+  		console.log($('tbody input[type="checkbox"]').eq(0)('checked', ));
+  	})
+  	
+  	//등록버튼..
+  	$('.addBtn').on('click', function(e){ 
+  	// tr생성> td*3생성. tbody에 append.
+  		$('tbody#list').append(
+  		  $('<tr />').append(
+  			  $('<td />').append($('<input />').attr('type', 'checkbox')), // type이라고하는 attribute 체크박스로 지정
+  			  $('<td />').text($('#sno').val()), // intput 태그 .val 이너텍스트 .text
+  			  $('<td />').text($('#sname').val()),
+  			  $('<td />').text($('#score').val())
+  		  )
+  		);
+  	//입력값 초기화.
+  		$('#sno').val('');
+  		$('#sname').val('');
+  		$('#score').val('');
+  		
+  		// 체크박스 요소들에 true 체크풀리면 false  prop(property)함수로  값제어가능 $('thead input').prop('checked',true)
+  	}) 
+  	
+  	
+  	
+  </script>
+</body>
+</html>

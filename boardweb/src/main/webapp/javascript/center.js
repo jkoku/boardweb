@@ -86,6 +86,14 @@ document.querySelector('#searchBtn').addEventListener('click', function(e){
       .forEach(center =>  tbody.append(makeRow(center)));
 }) 
 
+document.querySelector('#show').addEventListener('click', function(e){
+	tbody.innerHTML = '';
+	let kw = document.querySelector('#keyword').value;
+	centerList.filter(center => center.sido.indexOf(kw) > 0)  // 시도 값이 같은 배열. filter():특정조건 만족하는 요소추출
+      .forEach(center =>  tbody.append(makeRow(center)));
+}) 
+
+
 /*document.querySelector('keyword').addEventListener('keyup', function(e){
 	tbody.innerHTML = ''; 'click'에 'change' 'keyup'
 	let kw = document.querySelector('#keyword').value;
@@ -119,7 +127,5 @@ document.getElementById('registerData').addEventListener('click', function(e) {
 	.catch(err => console.log(err))
 	
 })
-
-
 
 

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>jquery1.html</title>
+<script src="jquery-3.7.1.min.js"></script>
+</head>
+<body>
+	<div id="show">
+	<!--
+	<ul>
+	   <li>홍길동</li>	
+	   <li>김민석</li>
+	</ul> 
+	-->
+	</div>
+	<script>
+	 // jqeury객체. document.createElement('ul')
+	 let ulTag = $('<ul />').append($('<li />').text('홍길동'), $('<li />').text('김민석')); //생성할때는 태그 이너텍스토 속성이아니라 메서드.
+	 console.log(ulTag)
+	 $('#show').append(ulTag);//선택할때는 선택자 값 show를 가지고와서 하위 append해서 ul에 넣어주겠따.
+	</script>
+</body>
+</html>
