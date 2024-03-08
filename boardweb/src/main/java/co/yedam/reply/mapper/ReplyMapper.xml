@@ -5,77 +5,86 @@
 
 <mapper namespace="co.yedam.reply.mapper.ReplyMapper">
 
-		<select id="selectList" parameterType="search" resultType="reply">
+	<select id="selectList" parameterType="search"
+		resultType="reply">
 		select reply_no
-				,board_no
-				,reply
-				,replyer
-				,reply_date
+		,board_no
+		,reply
+		,replyer
+		,reply_date
 		from (select/*+ INDEX(r reply_pk) */ rownum rn, r.*
-		        from tbl_reply r
-		        where board_no = #{bno}
+		from tbl_reply r
+		where board_no = #{bno}
 		        <![CDATA[		        
 		        and rownum <= (#{rpage} * 5) ) b
 		        ]]>
-	where b.rn > (#{rpage} - 1) * 5 
+		where b.rn > (#{rpage} - 1) * 5
+	</select>
+
+	<select id="selectList2" parameterType="int"
+		resultType="reply">
+		select/*+ INDEX(r reply_pk) */ r.*
+		from tbl_reply r
+		where board_no = #{bno}
 	</select>
 
 	<insert id="insertReply">
-		<selectKey resultType="int" keyProperty="replyNo" order="BEFORE">
-		  select reply_seq.nextval
-	 	  from dual
+		<selectKey resultType="int" keyProperty="replyNo"
+			order="BEFORE">
+			select reply_seq.nextval
+			from dual
 		</selectKey>
 		insert into tbl_reply(reply_no
-						,board_no
-						,reply
-						,replyer
-						,reply_date)
+								,board_no
+								,reply
+								,replyer
+								,reply_date)
 		values(#{replyNo}
-		  ,#{boardNo}
-		  ,#{reply}
-		  ,#{replyer}
-		  ,sysdate )
+				,#{boardNo}
+				,#{reply}
+				,#{replyer}
+				,sysdate )
 	</insert>
 
-	<delete id="deleteReply" parameterType="reply" >
-		delete from tbl_reply
+	<delete id="deleteReply" parameterType="reply">
+		delete from
+		tbl_reply
 		where reply_no = #{rno}
 	</delete>
-	
-	<select id="selectCount" parameterType="int" resultType="int" >
+
+	<select id="selectCount" parameterType="int" resultType="int">
 		select count(*)
 		from tbl_reply
 		where board_no = #{bno}
 	</select>
-	
-	<insert id ="insertCenter">
-	  insert into tbl_center(id, center_name, sido, phone_number, address)
-	  <foreach collection="array" item="center"
-	     open=" select " separator=" from dual union all select " close =" from dual ">
-	     #{center.id}, #{center.centerName}, #{center.sido}, #{center.phoneNumber}, #{center.address}
-	  </foreach>
+
+	<insert id="insertCenter">
+		insert into tbl_center(id, center_name, sido, phone_number, address)
+		<foreach collection="array" item="center" open=" select "
+			separator=" from dual union all select " close=" from dual ">
+			#{center.id}, #{center.centerName}, #{center.sido}, #{center.phoneNumber},
+			#{center.address}
+		</foreach>
 	</insert>
 
-	<!--select 1, 'cente1', 'seoul','010-111','서울시100' from dual
-	union all
-	select 2, 'cente2', 'seoul','010-111','서울시100' from dual
-	union all
-	select 3, 'cente3', 'seoul','010-111','서울시100' from dual  -->
-	
-	<delete id ="deleteCenter">
-	 delete from tbl_center
-	 where id in
-	 <foreach collection="array" item="center"
-	   open=" ( " separator=", " close=" ) ">
-	   #{center.id}
-	 </foreach>
+	<!--select 1, 'cente1', 'seoul','010-111','서울시100' from dual union all select 
+		2, 'cente2', 'seoul','010-111','서울시100' from dual union all select 3, 'cente3', 
+		'seoul','010-111','서울시100' from dual -->
+
+	<delete id="deleteCenter">
+		delete from tbl_center
+		where id in
+		<foreach collection="array" item="center" open=" ( "
+			separator=", " close=" ) ">
+			#{center.id}
+		</foreach>
 	</delete>
-	
-	<select id = "countPerSido" resultType="map">
-	select sido "sido", 
-      	   count(*) "cnt"
- 	from tbl_center
-	group by sido
+
+	<select id="countPerSido" resultType="map">
+		select sido "sido",
+		count(*) "cnt"
+		from tbl_center
+		group by sido
 	</select>
-	
+
 </mapper>

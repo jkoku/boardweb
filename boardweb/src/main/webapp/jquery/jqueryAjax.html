@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+<body>
+<!--jqueryAjax.html -->
+<script>
+	// $.get()   //$.get(URL주소[,콜백함수]);
+    $.get('../bookList.do', function(result){ 
+    	console.log(result);
+    	// 자바스크립트용
+    	result.forEach((item, idx, ary) => {
+    		console.log(item, idx, ary);
+    	});
+    
+    	$(result).each((idx, item, ary) => {
+    		console.log(item);
+    		$('<tr />').append(
+    		 	$('<td />').text(item.bookCode), //도서코드
+    		 	$('<td />').text(item.bookName), //도서코드
+    		 	$('<td />').text(item.author) // 저자
+    		//).appendTo($('table:nth-of-type(2) tbody'));
+    		).appendTo($('table:nth-of-type(2) tbody'));
+    	});
+    })
+    
+    // Dom요소 로딩 후 처리. 스크립트가 먼저 나오고 있어서
+    $(document).ready(function(e){
+    	// 등록 이벤트.
+    	  $('#addBtn').on('click', function(e){
+	    	let bcode = $('#bcode').val();
+	    	let bname = $('#bname').val();
+	    	let bauthor = $('#bauthor').val();
+	    	let bpress = $('#bpress').val();
+	    	let bprice = $('#bprice').val();
+    		
+    		// ajax호출.  $.$.ajax(URL주소[,옵션])
+			$.ajax({
+				url: '../addBook.do',
+			    method: 'post', // 방식은 post
+			    data:{bcode, bname, bauthor, bpress,bprice}, // bcode=값&bname=값...
+			    dataType:'json' // json타입으로 받아옴.
+			})
+			 .done(function(result){
+				console.log(result); // OK,NG
+				if (result.retCodo == 'OK') {
+					alert('등록 완료.')
+					//화면에 추가
+					 $('<tr />').append(
+			    	 $('<td />').text(bcode), //도서코드
+			    	 $('<td />').text(bname), //도서코드
+			    	 $('<td />').text(bauthor) // 저자
+	    			).appendTo($('table:nth-of-type(2) tbody'));
+				} else {
+					alert('등록 실패.')
+				}
+			 })
+			 .fail(function(err) {
+				console.log(err);
+			 }) 
+			 .always(function(result) {
+				console.log('처리 완료.');
+			 })
+    	  })
+    })
+    
+</script>
+<table class="table">
+	<tr>
+		<th>도서코드</th>
+		<td><input type="text" id="bcode" value="B005"></td>
+	</tr>
+	<tr>
+		<th>도서명</th>
+		<td><input type="text" id="bname" value="파워자바"></td>
+	</tr>
+	<tr>
+		<th>저자</th> 
+		<td><input type="text" id="bauthor" value="홍길동"></td>
+	</tr>
+	<tr>
+		<th>출판사</th> 
+		<td><input type="text" id="bpress" value="행복출판사"></td>
+	</tr>
+	<tr>
+		<th>금액</th> 
+		<td><input type="number" id="bprice" value="20000"></td>
+	</tr>
+	<tr>
+	  <td colspan = "2" align ="center">
+	  <button id= "addBtn">등록</button>
+	  </td>
+	</tr>
+</table>
+
+<table border="1">
+	<thead>
+		<tr><th>도서코드</th><th>도서명</th><th>저자</th></tr>
+	</thead>
+	<tbody></tbody>
+</table>	
+
+</body>
+</html>
+
+<!--     		
+					// ajax호출.  $.post(URL주소, {서버로전송할데이터},{실핼항 콜백함수});
+					$.post('../addBook.do', // url
+    				{bcode, bname, bauthor, bpress, bprice}, // 전송할 데이터.
+    				function(result){
+    				 console.log(result);
+    				  if(result.retCode == 'OK'){
+    					alert('정상 등록 완료.')
+    					// tr생성후  tbody에 append
+	    					$('<tr />').append(
+			    		 	$('<td />').text(bcode), //도서코드
+			    		 	$('<td />').text(bname), //도서코드
+			    		 	$('<td />').text(bauthor) // 저자
+	    					).appendTo($('table:nth-of-type(2) tbody'));
+    				  } else {
+    					alert('등록 실패.')
+    				  }
+    				}) // end of post -->

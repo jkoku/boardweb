@@ -41,6 +41,7 @@ public class AddBookControl implements Control {
 		} catch (Exception e) {
 			 // {"retCod": "NG"} 
 			//e.getMessage() //에러메세지 넘겨줌
+			e.printStackTrace();
 			resp.getWriter().print("{\"retCode\": \"NG\"} ");
 		}
 	}
